@@ -1,8 +1,8 @@
-package = "async"
+luapackage = "async"
 version = "scm-1"
 
 source = {
-   url = "git://github.com/clementfarabet/async",
+   url = "git://github.com/FutureProcessing/async",
    dir = "async"
 }
 
@@ -22,12 +22,9 @@ dependencies = {
 
 build = {
    type = "command",
-   build_command = "$(MAKE)  LUA=$(LUA)  LUA_BINDIR=$(LUA_BINDIR)  LUA_LIBDIR=$(LUA_LIBDIR)  LUA_INCDIR=$(LUA_INCDIR)",
+   build_command = "echo Work in progress... && $(MAKE) LUA_BINDIR=$(LUA_BINDIR)  LUA_LIBDIR=$(LUA_LIBDIR)  LUA_INCDIR=$(LUA_INCDIR)",
    install_command = [[
 cp -r async $(LUADIR)/
-cp luv/luv.so lhttp_parser/lhttp_parser.so $(LIBDIR)/
-cp luv/libuv/libuv.a $(LUA_LIBDIR)/libuv.a
-cp luv/luv.a $(LUA_LIBDIR)/libluv.a
-cp lhttp_parser/lhttp_parser.a $(LUA_LIBDIR)/liblhttp_parser.a
+cp luv.so lhttp_parser.so $(LIBDIR)/
    ]]
 }
