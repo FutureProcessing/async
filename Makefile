@@ -1,11 +1,11 @@
-LUANAME= $(shell basename $(LUA))
+LUANAME=  $(LUA)
 
-all: lhttp_parser/lhttp_parser.so luv/luv.so
+all: lhttp_parser/lhttp_parser.dll luv/luv.dll
 
-lhttp_parser/lhttp_parser.so:
+lhttp_parser/lhttp_parser.dll:
 	$(MAKE) -C lhttp_parser  LUA=$(LUANAME) LUA_BINDIR=$(LUA_BINDIR)  LUA_LIBDIR=$(LUA_LIBDIR)  LUA_INCDIR=$(LUA_INCDIR)
 
-luv/luv.so: luv/Makefile
+luv/luv.dll: luv/Makefile
 	$(MAKE) -C luv  LUA=$(LUANAME)  LUA_BINDIR=$(LUA_BINDIR)  LUA_LIBDIR=$(LUA_LIBDIR)  LUA_INCDIR=$(LUA_INCDIR)
 
 clean:

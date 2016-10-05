@@ -12,7 +12,7 @@ if /i "%1"=="--?" goto help
 if /i "%1"=="/?" goto help
 
 @rem Process arguments.
-set config=
+set config=Release
 set target=Build
 set noprojgen=
 set nobuild=
@@ -41,6 +41,14 @@ shift
 goto next-arg
 :args-done
 
+@rem Look for Visual Studio 2015
+if not defined VS140COMNTOOLS goto vc-set-2012
+if not exist "%VS140COMNTOOLS%\..\..\vc\vcvarsall.bat" goto vc-set-2012
+call "%VS140COMNTOOLS%\..\..\vc\vcvarsall.bat" %vs_toolset%
+set GYP_MSVS_VERSION=2015
+goto select-target
+
+:vc-set-2012
 @rem Look for Visual Studio 2012
 if not defined VS110COMNTOOLS goto vc-set-2010
 if not exist "%VS110COMNTOOLS%\..\..\vc\vcvarsall.bat" goto vc-set-2010
@@ -67,6 +75,8 @@ goto select-target
 :vc-set-notfound
 echo Warning: Visual Studio not found
 
+echo GYP_MSVS_VERSION=%GYP_MSVS_VERSION%
+
 :select-target
 if not "%config%"=="" goto project-gen
 if "%run%"=="run-tests.exe" set config=Debug& goto project-gen
@@ -79,8 +89,8 @@ if defined noprojgen goto msbuild
 
 @rem Generate the VS project.
 if exist build\gyp goto have_gyp
-echo git clone https://git.chromium.org/external/gyp.git build/gyp
-git clone https://git.chromium.org/external/gyp.git build/gyp
+echo git clone https://chromium.googlesource.com/external/gyp build/gyp
+git clone https://chromium.googlesource.com/external/gyp build/gyp
 if errorlevel 1 goto gyp_install_failed
 goto have_gyp
 
@@ -91,7 +101,7 @@ exit /b 1
 
 :have_gyp
 if not defined PYTHON set PYTHON="python"
-%PYTHON% gyp_uv -Dtarget_arch=%target_arch% -Dlibrary=%library%
+%PYTHON% gyp_uv.py -Dtarget_arch=%target_arch% -Dlibrary=%library%
 if errorlevel 1 goto create-msvs-files-failed
 if not exist uv.sln goto create-msvs-files-failed
 echo Project files generated.
@@ -110,7 +120,7 @@ goto run
 
 @rem Build the sln with msbuild.
 :msbuild-found
-msbuild uv.sln /t:%target% /p:Configuration=%config% /p:Platform="%platform%" /clp:NoSummary;NoItemAndPropertyList;Verbosity=minimal /nologo
+msbuild libuv.vcxproj /t:%target% /p:Configuration=%config% /p:Platform="%platform%" /clp:NoSummary;NoItemAndPropertyList;Verbosity=minimal /nologo
 if errorlevel 1 exit /b 1
 
 :run

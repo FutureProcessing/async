@@ -1,4 +1,4 @@
-luapackage = "async"
+package = "async"
 version = "scm-1"
 
 source = {
