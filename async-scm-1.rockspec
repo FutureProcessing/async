@@ -22,9 +22,6 @@ dependencies = {
 
 build = {
    type = "command",
-   build_command = "echo Work in progress... && $(MAKE) LUA_BINDIR=$(LUA_BINDIR)  LUA_LIBDIR=$(LUA_LIBDIR)  LUA_INCDIR=$(LUA_INCDIR)",
-   install_command = [[
-cp -r async $(LUADIR)/
-cp luv.so lhttp_parser.so $(LIBDIR)/
-   ]]
+   build_command = "cmake -E make_directory build && cd build && cmake .. -DCMAKE_BUILD_TYPE=Release -DLUA=$(LUA) -DLUALIB=$(LUALIB) -DLUA_BINDIR="$(LUA_BINDIR)" -DLUA_INCDIR="$(LUA_INCDIR)" -DLUA_LIBDIR="$(LUA_LIBDIR)" -DLUADIR="$(LUADIR)" -DLIBDIR="$(LIBDIR)" -DCMAKE_INSTALL_PREFIX="$(PREFIX)" && $(MAKE)",
+   install_command = "cd build && $(MAKE) install"
 }
