@@ -1648,6 +1648,8 @@ static void luv_push_stats_table(lua_State* L, uv_statbuf_t* s) {
   lua_setfield(L, -2, "mtime");
   lua_pushinteger(L, s->st_ctime);
   lua_setfield(L, -2, "ctime");
+// TODO: ? posix macros not present. Do we need them?
+#ifndef _MSC_VER
   lua_pushboolean(L, S_ISREG(s->st_mode));
   lua_setfield(L, -2, "is_file");
   lua_pushboolean(L, S_ISDIR(s->st_mode));
@@ -1662,6 +1664,7 @@ static void luv_push_stats_table(lua_State* L, uv_statbuf_t* s) {
   lua_setfield(L, -2, "is_symbolic_link");
   lua_pushboolean(L, S_ISSOCK(s->st_mode));
   lua_setfield(L, -2, "is_socket");
+#endif
 #ifdef __POSIX__
   lua_pushinteger(L, s->st_blksize);
   lua_setfield(L, -2, "blksize");
@@ -1671,12 +1674,15 @@ static void luv_push_stats_table(lua_State* L, uv_statbuf_t* s) {
 }
 
 static int luv_string_to_flags(lua_State* L, const char* string) {
+// TODO: is this needed?
+#ifndef _MSC_VER
   if (strcmp(string, "r") == 0) return O_RDONLY;
   if (strcmp(string, "r+") == 0) return O_RDWR;
   if (strcmp(string, "w") == 0) return O_CREAT | O_TRUNC | O_WRONLY;
   if (strcmp(string, "w+") == 0) return O_CREAT | O_TRUNC | O_RDWR;
   if (strcmp(string, "a") == 0) return O_APPEND | O_CREAT | O_WRONLY;
   if (strcmp(string, "a+") == 0) return O_APPEND | O_CREAT | O_RDWR;
+#endif
   return luaL_error(L, "Unknown file open flag '%s'", string);
 }
 
