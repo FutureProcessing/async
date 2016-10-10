@@ -34,7 +34,7 @@ libuv.dylib
 luv/libuv/src/unix/uv-dtrace.h
 
 out/
-build/gyp
+build/
 
 run-tests
 run-tests.exe

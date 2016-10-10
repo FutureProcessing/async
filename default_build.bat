@@ -1,5 +1,7 @@
 if "%1"=="re" (rmdir /s /q build)
 
+@where cl >nul 2>nul || setlocal && call "%VS140COMNTOOLS%vsvars32.bat"
+
 if not exist build\ (
     cmake -E make_directory build
 )
@@ -17,8 +19,14 @@ cmake .. -G "NMake Makefiles" ^
   -DLIBDIR="D:/ML/luarocks/async/scm-1/lib" ^
   -DCMAKE_INSTALL_PREFIX="D:/ML/luarocks/async/scm-1"
 
-pause
-  
+@echo|set /p="To build now: "
+@pause
+
 nmake
+
+@echo|set /p="To install now: "
+@pause
+
+nmake install
 
 popd

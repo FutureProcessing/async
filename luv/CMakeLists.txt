@@ -19,3 +19,8 @@ target_link_libraries(luv libuv ${LUALIB}
     "shell32.lib"
     "ws2_32.lib"
 )
+
+install(TARGETS luv
+    LIBRARY DESTINATION ${LUA_LIBDIR}
+    RUNTIME DESTINATION ${LUA_LIBDIR}
+)
