@@ -5,7 +5,10 @@ add_subdirectory(libuv)
 include_directories("${LUA_INCDIR}" "libuv/include")
 link_directories("${LUA_LIBDIR}")
 
-add_library(luv SHARED src/common.c src/luv_functions.c)
+add_library(luv SHARED src/luv.c src/common.c)
+
+# not sure if right way, but add DLL_EXPORT correctly
+add_definitions(/DLUA_LIB)
 
 # "ws2_32.lib", as shown here:
 # http://blog.yastrebkov.com/2010/08/unresolved-externals-while-linking.html
