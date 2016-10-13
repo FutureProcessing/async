@@ -15,7 +15,7 @@ add_definitions(/DLUA_LIB)
 # rest of libs:
 # https://github.com/joyent/libuv/issues/1089
 
-target_link_libraries(luv libuv ${LUALIB} 
+target_link_libraries(luv libuv ${LUALIB}
     "advapi32.lib"
     "iphlpapi.lib"
     "psapi.lib"
